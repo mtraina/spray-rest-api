@@ -22,6 +22,8 @@ class MyServiceActor extends Actor with MyService {
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
+  import UserJsonProtocol._
+  import spray.json._
 
   val myRoute =
     path("") {
@@ -33,6 +35,17 @@ trait MyService extends HttpService {
                 <h1>Say hello to <i>spray-routing</i> on <i>spray-can</i>!</h1>
               </body>
             </html>
+          }
+        }
+      }
+    } ~ path("api") {
+      get {
+        respondWithMediaType(`application/json`) {
+          complete {
+            //import UserJsonProtocol._
+
+            val user = User("mark", 38)
+            user.toJson.prettyPrint
           }
         }
       }
